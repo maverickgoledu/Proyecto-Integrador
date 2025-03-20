@@ -1,0 +1,65 @@
+﻿@using System.Security.Claims
+
+@{
+    var currentUser = User.FindFirstValue(ClaimTypes.Name);
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+    var isAdmin = User.IsInRole("Admin");
+    var isAnalyst = User.IsInRole("Analyst") || isAdmin;
+}
+
+<aside class="side-menu" id="sideMenu">
+    <div class="menu-header">
+        <img src="~/img/logo.png" alt="Meta ADS Analyzer" class="menu-logo" />
+        <h2 class="menu-title">Meta ADS Analyzer</h2>
+    </div>
+
+    <div class="menu-user">
+        <span class="material-icons user-icon">account_circle</span>
+        <div class="user-info">
+            <div class="user-name">@currentUser</div>
+            <div class="user-role">@userRole</div>
+        </div>
+    </div>
+
+    <nav class="menu-nav">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a asp-controller="Dashboard" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Dashboard" ? "active" : "")">
+                    <span class="material-icons">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Campaign" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Campaign" ? "active" : "")">
+                    <span class="material-icons">campaign</span>
+                    <span>Campañas</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="CampaignMetrics" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "CampaignMetrics" ? "active" : "")">
+                    <span class="material-icons">analytics</span>
+                    <span>Métricas</span>
+                </a>
+            </li>
+
+            @if (isAdmin)
+            {
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "User" ? "active" : "")">
+                        <span class="material-icons">people</span>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <div class="menu-footer">
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            <button type="submit" class="btn btn-logout">
+                <span class="material-icons">logout</span>
+                <span>Cerrar Sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>

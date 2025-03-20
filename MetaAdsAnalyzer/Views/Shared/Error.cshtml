@@ -1,0 +1,28 @@
+﻿@model MetaAdsAnalyzer.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="text-center mt-5">
+    <div class="mb-4">
+        <span class="material-icons text-danger" style="font-size: 80px;">error</span>
+    </div>
+    <h1 class="display-4">Error</h1>
+    <p class="lead">Lo sentimos, ha ocurrido un error al procesar su solicitud.</p>
+
+    @if (Model.ShowRequestId)
+    {
+        <p class="text-muted">
+            <small>ID de solicitud: <code>@Model.RequestId</code></small>
+        </p>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary me-2">
+            <span class="material-icons align-middle me-2">home</span> Volver al inicio
+        </a>
+        <button onclick="window.history.back();" class="btn btn-outline-secondary">
+            <span class="material-icons align-middle me-2">arrow_back</span> Volver atrás
+        </button>
+    </div>
+</div>

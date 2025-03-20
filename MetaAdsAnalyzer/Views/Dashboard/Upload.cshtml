@@ -1,0 +1,95 @@
+﻿@model MetaAdsAnalyzer.Models.FileUploadViewModel
+
+@{
+    ViewData["Title"] = "Cargar datos";
+}
+
+<div class="container-fluid">
+    <h1 class="h2 mb-4">Cargar datos de Meta ADS</h1>
+
+    <div class="row">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">Seleccionar archivo CSV</h5>
+
+                    <form asp-controller="Dashboard" asp-action="Upload" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <div class="alert @(Model.Success ? "alert-success" : "alert-danger")">
+                                @Model.Message
+                                @if (Model.Success && Model.RecordsProcessed > 0)
+                                {
+                                    <br />
+                                    <strong>Registros procesados: @Model.RecordsProcessed</strong>
+                                }
+                            </div>
+                        }
+
+                        <div class="mb-4">
+                            <label class="form-label" for="csvFile">Archivo CSV</label>
+                            <input type="file" id="csvFile" name="CsvFile" class="form-control" accept=".csv" required />
+                            <span asp-validation-for="CsvFile" class="text-danger"></span>
+                            <div class="form-text">
+                                Selecciona el archivo CSV exportado desde Meta ADS
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="material-icons align-middle me-2">upload_file</span> Cargar archivo
+                            </button>
+                            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary">
+                                <span class="material-icons align-middle me-2">arrow_back</span> Volver al dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">Instrucciones</h5>
+
+                    <ol class="mb-0">
+                        <li class="mb-3">
+                            Accede a tu cuenta de <strong>Meta Business Suite</strong>
+                        </li>
+                        <li class="mb-3">
+                            Ve a la sección de <strong>Anuncios</strong> y selecciona <strong>Conjuntos de anuncios</strong>
+                        </li>
+                        <li class="mb-3">
+                            Haz clic en el botón <strong>Exportar</strong> y selecciona <strong>Exportar informe</strong>
+                        </li>
+                        <li class="mb-3">
+                            Configura el rango de fechas y las métricas que deseas incluir
+                        </li>
+                        <li class="mb-3">
+                            Haz clic en <strong>Exportar</strong> y descarga el archivo CSV
+                        </li>
+                        <li>
+                            Sube el archivo CSV en este formulario para importar los datos
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Validar que se haya seleccionado un archivo antes de enviar
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const fileInput = document.getElementById('csvFile');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Por favor, selecciona un archivo CSV');
+            }
+        });
+    </script>
+}

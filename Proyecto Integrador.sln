@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaAdsAnalyzer", "MetaAdsAnalyzer\MetaAdsAnalyzer.csproj", "{E80D7FA1-2EC2-4D3C-AADD-003AF37DEB56}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E80D7FA1-2EC2-4D3C-AADD-003AF37DEB56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E80D7FA1-2EC2-4D3C-AADD-003AF37DEB56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E80D7FA1-2EC2-4D3C-AADD-003AF37DEB56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E80D7FA1-2EC2-4D3C-AADD-003AF37DEB56}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DEDA0282-5794-4B6D-92AA-2A7A0ED4E96A}
+	EndGlobalSection
+EndGlobal

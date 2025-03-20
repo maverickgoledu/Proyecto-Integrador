@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Acceso denegado";
+}
+
+<div class="text-center mt-5">
+    <div class="mb-4">
+        <span class="material-icons text-danger" style="font-size: 80px;">lock</span>
+    </div>
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p class="lead">No tienes permisos para acceder a esta página.</p>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">
+        <span class="material-icons align-middle me-2">home</span> Volver al inicio
+    </a>
+</div>

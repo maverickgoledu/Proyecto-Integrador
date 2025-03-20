@@ -1,0 +1,93 @@
+﻿@model MetaAdsAnalyzer.Models.UserModel
+
+@{
+    ViewData["Title"] = "Detalles del usuario";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">@ViewData["Title"]</h1>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary me-2">
+                <span class="material-icons align-middle me-2">edit</span> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <span class="material-icons align-middle me-2">arrow_back</span> Volver a la lista
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="card-title mb-3">Información del usuario</h5>
+
+                            <dl class="row">
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Username)</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.Username)</dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Email)</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Role)</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-primary">@Html.DisplayFor(model => model.Role)</span>
+                                </dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+                                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.LastLogin)</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.LastLogin.HasValue)
+                                    {
+                                        @Model.LastLogin.Value.ToString("dd/MM/yyyy HH:mm")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Nunca ha iniciado sesión</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.IsActive)</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.IsActive)
+                                    {
+                                        <span class="badge bg-success">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Inactivo</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                                <div class="bg-light rounded-circle p-4 mb-3">
+                                    <span class="material-icons" style="font-size: 64px;">account_circle</span>
+                                </div>
+                                <h4>@Model.Username</h4>
+                                <p class="text-muted">@Model.Email</p>
+
+                                <div class="mt-4">
+                                    <form asp-action="ToggleStatus" asp-route-id="@Model.Id" asp-route-isActive="@(!Model.IsActive)" method="post" style="display: inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn @(Model.IsActive ? "btn-warning" : "btn-success")">
+                                            <span class="material-icons align-middle me-2">@(Model.IsActive ? "block" : "check_circle")</span>
+                                            @(Model.IsActive ? "Desactivar usuario" : "Activar usuario")
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

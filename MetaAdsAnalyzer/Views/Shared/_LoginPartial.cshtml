@@ -1,0 +1,36 @@
+﻿@using System.Security.Claims
+
+<ul class="navbar-nav">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="material-icons align-middle">account_circle</span>
+                <span class="ms-1">@User.Identity.Name</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li>
+                    <span class="dropdown-item-text text-muted">
+                        <small>@User.FindFirstValue(ClaimTypes.Role)</small>
+                    </span>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout">
+                        <button type="submit" class="dropdown-item">
+                            <span class="material-icons align-middle fs-5 me-1">logout</span> Cerrar sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">
+                <span class="material-icons align-middle">login</span> Iniciar sesión
+            </a>
+        </li>
+    }
+</ul>

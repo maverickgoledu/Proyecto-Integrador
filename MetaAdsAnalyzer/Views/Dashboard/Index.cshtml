@@ -1,0 +1,367 @@
+﻿@model MetaAdsAnalyzer.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Dashboard de Análisis Meta ADS</h1>
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Analista"))
+        {
+            <a asp-controller="Dashboard" asp-action="Upload" class="btn btn-primary">
+                <span class="material-icons align-middle me-2">upload_file</span> Cargar Datos
+            </a>
+        }
+    </div>
+
+    @if (Model.UltimaCarga.HasValue)
+    {
+        <div class="alert alert-info">
+            <span class="material-icons align-middle me-2">info</span>
+            Última actualización de datos: @Model.UltimaCarga.Value.ToString("dd/MM/yyyy HH:mm")
+        </div>
+    }
+
+    <!-- Filtros -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Filtros</h5>
+            <form asp-controller="Dashboard" asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="startDate" class="form-label">Fecha de inicio</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" />
+                </div>
+                <div class="col-md-4">
+                    <label for="endDate" class="form-label">Fecha de fin</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" />
+                </div>
+                <div class="col-md-3">
+                    <label for="adSetName" class="form-label">Conjunto de anuncios</label>
+                    <select id="adSetName" name="adSetName" class="form-select">
+                        <option value="">Todos</option>
+                        @foreach (var adSet in Model.AvailableAdSets)
+                        {
+                            if (adSet == Model.SelectedAdSet)
+                            {
+                                <option value="@adSet" selected>@adSet</option>
+                            }
+                            else
+                            {
+                                <option value="@adSet">@adSet</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <span class="material-icons">filter_alt</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tarjetas de KPIs -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Importe gastado (USD)</h5>
+                    <h2 class="display-6 fw-bold text-primary">@Model.TotalImporteGastado.ToString("C2")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Alcance</h5>
+                    <h2 class="display-6 fw-bold text-success">@Model.TotalAlcance.ToString("N0")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Impresiones</h5>
+                    <h2 class="display-6 fw-bold text-info">@Model.TotalImpresiones.ToString("N0")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Resultados</h5>
+                    <h2 class="display-6 fw-bold text-warning">@Model.TotalResultados.ToString("N0")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Costo por resultado</h5>
+                    <h2 class="display-6 fw-bold text-danger">@Model.CostoPromedioResultado.ToString("C2")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Alcance vs Impresiones</h5>
+                    <h2 class="display-6 fw-bold text-secondary">@Model.AlcanceVsImpresiones.ToString("N2")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">Tasa de conversión</h5>
+                    <h2 class="display-6 fw-bold text-dark">@((Model.TasaConversion * 100).ToString("N2"))%</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-dark" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small text-uppercase">CPM</h5>
+                    <h2 class="display-6 fw-bold text-primary">@Model.CostoPorMilImpresiones.ToString("C2")</h2>
+                    <div class="progress mt-3" style="height: 4px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos (altura reducida) -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Presupuesto diario por conjunto de anuncios</h5>
+                    <!-- Reducido de 300px a 200px -->
+                    <div style="height: 300px; position: center;">
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Importe gastado por conjunto de anuncios</h5>
+                    <!-- Reducido de 300px a 200px -->
+                    <div style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 200px; height: 200px;">
+                            <canvas id="spendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de tendencia mensual (altura reducida) -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Tendencia mensual (último año)</h5>
+                    <div class="mb-3">
+                        <select id="chartMetric" class="form-select form-select-sm d-inline-block w-auto">
+                            <option value="ImporteGastado">Importe gastado</option>
+                            <option value="Alcance">Alcance</option>
+                            <option value="Impresiones">Impresiones</option>
+                            <option value="Resultados">Resultados</option>
+                        </select>
+                    </div>
+                    <!-- Reducido de 300px a 180px -->
+                    <canvas id="trendChart" height="60"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Colores para los gráficos
+        const colors = [
+            'rgba(54, 162, 235, 0.8)',
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(75, 192, 192, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(153, 102, 255, 0.8)',
+            'rgba(255, 159, 64, 0.8)'
+        ];
+
+        // Configurar gráfico de presupuesto diario
+        const budgetChartCtx = document.getElementById('budgetChart').getContext('2d');
+        const budgetLabels = [@Html.Raw(string.Join(",", Model.PresupuestoDiarioPorConjunto.Keys.Select(k => $"'{k}'")))];
+        const budgetData = [@string.Join(",", Model.PresupuestoDiarioPorConjunto.Values)];
+
+        new Chart(budgetChartCtx, {
+            type: 'bar',
+            data: {
+                labels: budgetLabels,
+                datasets: [{
+                    label: 'Presupuesto diario (USD)',
+                    data: budgetData,
+                    backgroundColor: colors,
+                    borderColor: colors.map(c => c.replace('0.8', '1')),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        display: true,
+                        labels: {
+                            boxWidth: 12
+                        }
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Configurar gráfico de importe gastado
+        const spendChartCtx = document.getElementById('spendChart').getContext('2d');
+        const spendLabels = [@Html.Raw(string.Join(",", Model.ImporteGastadoPorConjunto.Keys.Select(k => $"'{k}'")))];
+        const spendData = [@string.Join(",", Model.ImporteGastadoPorConjunto.Values)];
+
+        new Chart(spendChartCtx, {
+            type: 'pie',
+            data: {
+                labels: spendLabels,
+                datasets: [{
+                    label: 'Importe gastado (USD)',
+                    data: spendData,
+                    backgroundColor: colors,
+                    borderColor: colors.map(c => c.replace('0.8', '1')),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        display: true,
+                        labels: {
+                            boxWidth: 12
+                        }
+                    },
+                    title: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Cargar datos para el gráfico de tendencia
+        let trendChart;
+        const loadTrendData = () => {
+            const year = new Date().getFullYear();
+            fetch(`/Dashboard/GetChartData?year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    createTrendChart(data);
+                })
+                .catch(error => console.error('Error al cargar los datos:', error));
+        };
+
+        // Crear gráfico de tendencia
+        const createTrendChart = (data) => {
+            const trendChartCtx = document.getElementById('trendChart').getContext('2d');
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const metric = document.getElementById('chartMetric').value;
+
+            if (trendChart) {
+                trendChart.destroy();
+            }
+
+            trendChart = new Chart(trendChartCtx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: metric,
+                        data: data.monthly[metric],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            display: true,
+                            labels: {
+                                boxWidth: 12
+                            }
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        };
+
+        // Evento de cambio de métrica
+        document.getElementById('chartMetric').addEventListener('change', () => {
+            loadTrendData();
+        });
+
+        // Cargar datos iniciales
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTrendData();
+        });
+    </script>
+}

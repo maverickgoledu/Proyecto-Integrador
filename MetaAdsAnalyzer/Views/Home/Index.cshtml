@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="home-container">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-4">Bienvenido al Analizador de Meta ADS</h1>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body p-5 text-center">
+                    <h2 class="mb-4">Analiza tus campañas de Meta ADS</h2>
+                    <p class="lead">Inicia sesión para acceder a las herramientas de análisis de datos de Meta ADS.</p>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary btn-lg mt-3">
+                            <span class="material-icons align-middle me-2">dashboard</span> Ir al Dashboard
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg mt-3">
+                            <span class="material-icons align-middle me-2">login</span> Iniciar sesión
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 mb-5 justify-content-center">
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body p-4 text-center">
+                    <span class="material-icons feature-icon">analytics</span>
+                    <h3 class="card-title">Análisis Detallado</h3>
+                    <p class="card-text">Visualiza todos los indicadores clave de rendimiento de tus campañas en Meta ADS.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body p-4 text-center">
+                    <span class="material-icons feature-icon">insert_chart</span>
+                    <h3 class="card-title">Gráficos Interactivos</h3>
+                    <p class="card-text">Interactúa con gráficos dinámicos que facilitan la comprensión de tus datos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body p-4 text-center">
+                    <span class="material-icons feature-icon">file_upload</span>
+                    <h3 class="card-title">Importación Fácil</h3>
+                    <p class="card-text">Importa tus archivos CSV directamente desde Meta ADS para un análisis inmediato.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

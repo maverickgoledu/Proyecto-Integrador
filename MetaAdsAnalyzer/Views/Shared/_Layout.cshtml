@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MetaAdsAnalyzer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/material-design.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="d-flex flex-column min-vh-100">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <!-- Layout para usuarios autenticados (con sidebar) -->
+            <div class="d-flex flex-grow-1">
+                <!-- Sidebar -->
+                <div class="sidebar bg-primary text-white">
+                    <div class="sidebar-header p-3">
+                        <h3 class="text-center">Meta ADS Analyzer</h3>
+                    </div>
+                    <hr class="bg-white mx-3" />
+                    <div class="sidebar-menu">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                                    <span class="material-icons align-middle me-2">home</span> Inicio
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Dashboard" asp-action="Index">
+                                    <span class="material-icons align-middle me-2">dashboard</span> Dashboard
+                                </a>
+                            </li>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Analista"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Dashboard" asp-action="Upload">
+                                        <span class="material-icons align-middle me-2">upload_file</span> Cargar Datos
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Users" asp-action="Index">
+                                        <span class="material-icons align-middle me-2">people</span> Usuarios
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content flex-grow-1">
+                    <header class="bg-white shadow-sm">
+                        <nav class="navbar navbar-expand-sm navbar-light">
+                            <div class="container-fluid">
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                                    <partial name="_LoginPartial" />
+                                </div>
+                            </div>
+                        </nav>
+                    </header>
+
+                    <div class="container-fluid py-4">
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show">
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                @TempData["ErrorMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Layout para usuarios no autenticados (sin sidebar) -->
+            <header class="bg-white shadow-sm">
+                <nav class="navbar navbar-expand-sm navbar-light">
+                    <div class="container">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MetaAdsAnalyzer</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            <main class="flex-grow-1">
+                <div class="py-4">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @RenderBody()
+                </div>
+            </main>
+        }
+
+        <footer class="border-top bg-light text-muted mt-auto">
+            <div class="container text-center py-3">
+                &copy; @DateTime.Now.Year - MetaAdsAnalyzer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
